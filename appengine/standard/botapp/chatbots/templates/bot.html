@@ -1,0 +1,26 @@
+{% load staticfiles %}
+<! doctype html >
+<html>
+	<head>
+		<title> BOT Messages </title>
+	</head>
+	<body>
+		<h1> {{ welcome_title }}</h1>
+		<table>
+		<tr>
+			<th>Receive Messages</th>
+			<th>Intent</th>
+			<th>Arg1</th>
+			<th>Date</th>
+		</tr>
+		{% for msg in bot_messages %}
+		<tr>
+			<td>{{ msg.message_text }}</td>
+			<td>{{ msg.intent_text }}</td>
+			<td>{{ msg.intent_arg1 }}</td>
+			<td>{{ msg.pub_date }}</td>
+		</tr>
+		{% endfor %}
+		</table>
+	</body>
+</html>
