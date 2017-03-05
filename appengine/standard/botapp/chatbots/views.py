@@ -15,15 +15,18 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from chatbots.models import BotMessage
 
-from django.utils import timezone
+import json
+import urllib2
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
-
+@csrf_exempt
 def pong(request):
 
 	# test add new message
@@ -47,4 +50,51 @@ def bot(request):
 		'welcome_title': 'This is bot messages:',
 		'bot_messages' : arrBotMessages
 		})
+
+@csrf_exempt
+def botcallback(request):
+
+	token = None
+
+	if request.method == 'POST':
+		token = _getTokenFromRequestBody(request.body)
+		data = json.dumps({
+			"replyToken":token,
+			"messages":[{
+				"type":"text",
+				"text": "test"
+			}]
+		})
+
+		_postback(data, token)
+	else :
+		HttpResponseNotAllowed("Method Not Allowed")
+
+	return HttpResponse("token: %s" % token)
+
+
+
+def _getTokenFromRequestBody(body):
+
+	try:
+
+		json_request = json.loads(body)
+
+		events_obj = json_request['events']
+		event_obj = events_obj[0]
+		token = event_obj['replyToken']
+		return token
+
+	except KeyError:
+		HttpResponseServerError("Malformed data!")
+
+def _postback(data, token):
+	url = 'https://api.line.me/v2/bot/message/reply'
+	opener = urllib2.build_opener(urllib2.HTTPHandler)
+	request = urllib2.Request(url, data=json.dumps(data))
+	request.add_header("Content-Type", "application/json; charset=UTF-8")
+	request.add_header("Authorization", "Bearer %s" % token)                                   
+	opener.open(request)
+
+
 

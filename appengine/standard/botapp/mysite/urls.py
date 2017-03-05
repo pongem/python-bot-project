@@ -20,10 +20,13 @@ from django.views.generic import TemplateView
 from chatbots.views import index
 from chatbots.views import pong
 from chatbots.views import bot
+from chatbots.views import botcallback
+
 
 urlpatterns = [
     url(r'^$', index),
     url(r'^pong/', pong),
     url(r'^bot/', bot),
+    url(r'^botcallback/', botcallback),
     url(r'^admin/', include(admin.site.urls)),
 ]
