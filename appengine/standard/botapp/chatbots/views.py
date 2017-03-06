@@ -19,6 +19,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from chatbots.models import BotMessage
+from chatbots.mod_SET_Helper import *
 
 import json
 import urllib2
@@ -71,6 +72,11 @@ def botcallback(request):
 		HttpResponseNotAllowed("Method Not Allowed")
 
 	return HttpResponse("token: %s" % token)
+
+def cpfprice(request):
+	helper = SETFetch()
+	price = helper.fetchCurrentStockInfo("CPF")
+	return HttpResponse("cpf price: %s" % price)
 
 
 
