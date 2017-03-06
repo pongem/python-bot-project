@@ -73,10 +73,17 @@ def botcallback(request):
 
 	return HttpResponse("token: %s" % token)
 
-def cpfprice(request):
+def price(request):
+	symbol = request.GET.get('symbol')
+	print ("query string: %s" % symbol)
+	if not symbol :
+		symbol = "CPF"
+	else:
+		symbol = symbol.upper()
+	print ("symbol: %s" % symbol)
 	helper = SETFetch()
-	price = helper.fetchCurrentStockInfo("CPF")
-	return HttpResponse("cpf price: %s" % price)
+	price = helper.fetchCurrentStockInfo( symbol )
+	return HttpResponse("%s price: %s" % (symbol,price))
 
 
 
