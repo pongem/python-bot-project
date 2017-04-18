@@ -99,7 +99,7 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/linebotprojectonpython:asia-northeast1:linebot-sqlinstance',
+            'HOST': '/cloudsql/linebotprojectonpython:asia-northeast1:linebotlight',
             'NAME': 'chatbots',
             'USER': 'pong',
             'PASSWORD': 'pong123',
